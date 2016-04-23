@@ -14,7 +14,7 @@
         You have created <span class="text-success"><%= pluralize current_user.agents.count, "agent" %></span>.
       </p>
       <p>
-        <%= link_to 'View <i class="icon-chevron-right"></i>'.html_safe, agents_path, class: "btn btn-primary" %>
+        <%= link_to 'View <i class="icon-chevron-right"></i>'.html_safe, huginn_agents_path, class: "btn btn-primary" %>
       </p>
     </div>
     <div class='col-md-6'>
@@ -24,7 +24,7 @@
         <span class=""><%= pluralize current_user.events.count, 'event' %> in total</span>.
       </p>
       <p>
-        <%= link_to 'View <i class="icon-chevron-right"></i>'.html_safe, events_path, class: "btn btn-primary" %>
+        <%= link_to 'View <i class="icon-chevron-right"></i>'.html_safe, huginn_events_path, class: "btn btn-primary" %>
       </p>
     </div>
   </div>

@@ -6,4 +6,4 @@
 
 require_relative './pre_runner_boot'
 
-AgentRunner.new(only: Agents::TwitterStreamAgent).run
+Huginn::AgentRunner.new(only: Huginn::Agents::TwitterStreamAgent).run

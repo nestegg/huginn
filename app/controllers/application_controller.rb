@@ -34,11 +34,11 @@ class ApplicationController < ActionController::Base
     case ret = params[:return].presence || options[:return]
       when "show"
         if @agent && !@agent.destroyed?
-          agent_path(@agent)
+          huginn_agent_path(@agent)
         else
-          agents_path
+          huginn_agents_path
         end
-      when /\A#{(Regexp::escape scenarios_path)}/, /\A#{(Regexp::escape agents_path)}/, /\A#{(Regexp::escape events_path)}/
+      when /\A#{(Regexp::escape huginn_scenarios_path)}/, /\A#{(Regexp::escape huginn_agents_path)}/, /\A#{(Regexp::escape huginn_events_path)}/
         ret
     end
   end

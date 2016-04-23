@@ -45,7 +45,7 @@ class WebRequestsController < ApplicationController
   def update_location
     if user = User.find_by_id(params[:user_id])
       secret = params[:secret]
-      user.agents.of_type(Agents::UserLocationAgent).each { |agent|
+      user.agents.of_type(Huginn::Agents::UserLocationAgent).each { |agent|
         if agent.options[:secret] == secret
           agent.trigger_web_request(request)
         end

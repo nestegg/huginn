@@ -5,7 +5,7 @@ module Users
     private
 
     def create_default_scenario
-      DefaultScenarioImporter.import(@user) if @user.persisted?
+      Huginn::DefaultScenarioImporter.import(@user) if @user.persisted?
     end
   end
 end

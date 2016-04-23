@@ -14,9 +14,9 @@ class WorkerStatusController < ApplicationController
     case max_id
     when nil
     when min_id
-      events_url = events_path(hl: max_id)
+      events_url = huginn_events_path(hl: max_id)
     else
-      events_url = events_path(hl: "#{min_id}-#{max_id}")
+      events_url = huginn_events_path(hl: "#{min_id}-#{max_id}")
     end
 
     render json: {

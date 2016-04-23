@@ -5,4 +5,4 @@
 
 require_relative './pre_runner_boot'
 
-AgentRunner.new(only: HuginnScheduler).run
+Huginn::AgentRunner.new(only: HuginnScheduler).run

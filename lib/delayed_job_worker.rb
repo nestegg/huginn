@@ -1,5 +1,5 @@
-class DelayedJobWorker < LongRunnable::Worker
-  include LongRunnable
+class DelayedJobWorker < Huginn::LongRunnable::Worker
+  include Huginn::LongRunnable
 
   def run
     @dj = Delayed::Worker.new

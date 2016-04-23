@@ -1,7 +1,7 @@
 require 'rufus/scheduler'
 
 class Rufus::Scheduler
-  SCHEDULER_AGENT_TAG = Agents::SchedulerAgent.name
+  SCHEDULER_AGENT_TAG = Huginn::Agents::SchedulerAgent.name
 
   class Job
     # Store an ID of SchedulerAgent in this job.
@@ -19,7 +19,7 @@ class Rufus::Scheduler
     def scheduler_agent
       agent_id = scheduler_agent_id or return nil
 
-      Agent.of_type(Agents::SchedulerAgent).active.find_by(id: agent_id)
+      Huginn::Agent.of_type(Huginn::Agents::SchedulerAgent).active.find_by(id: agent_id)
     end
   end
 
@@ -81,7 +81,7 @@ class Rufus::Scheduler
   # Schedule or reschedule jobs for all SchedulerAgents and unschedule
   # orphaned jobs if any.
   def schedule_scheduler_agents
-    scheduled_jobs = Agent.of_type(Agents::SchedulerAgent).map { |scheduler_agent|
+    scheduled_jobs = Huginn::Agent.of_type(Huginn::Agents::SchedulerAgent).map { |scheduler_agent|
       schedule_scheduler_agent(scheduler_agent)
     }.compact
 
@@ -92,8 +92,8 @@ class Rufus::Scheduler
   end
 end
 
-class HuginnScheduler < LongRunnable::Worker
-  include LongRunnable
+class HuginnScheduler < Huginn::LongRunnable::Worker
+  include Huginn::LongRunnable
 
   FAILED_JOBS_TO_KEEP = 100
 
@@ -149,21 +149,21 @@ class HuginnScheduler < LongRunnable::Worker
   def run_schedule(time)
     with_mutex do
       puts "Queuing schedule for #{time}"
-      AgentRunScheduleJob.perform_later(time)
+      Huginn::AgentRunScheduleJob.perform_later(time)
     end
   end
 
   def propagate!
     with_mutex do
       puts "Queuing event propagation"
-      AgentPropagateJob.perform_later
+      Huginn::AgentPropagateJob.perform_later
     end
   end
 
   def cleanup_expired_events!
     with_mutex do
       puts "Running event cleanup"
-      AgentCleanupExpiredJob.perform_later
+      Huginn::AgentCleanupExpiredJob.perform_later
     end
   end
 

@@ -2,7 +2,7 @@
 
 require_relative './pre_runner_boot'
 
-agent_runner = AgentRunner.new
+agent_runner = Huginn::AgentRunner.new
 
 # We need to wait a bit to let delayed_job set it's traps so we can override them
 Thread.new do

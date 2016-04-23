@@ -6,4 +6,4 @@
 
 require_relative './pre_runner_boot'
 
-AgentRunner.new(except: DelayedJobWorker).run
+Huginn::AgentRunner.new(except: DelayedJobWorker).run

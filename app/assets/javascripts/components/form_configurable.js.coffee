@@ -24,7 +24,7 @@ $ ->
     $("input[role~=validatable], select[role~=validatable]").on 'change', (e) =>
       form_data = getFormData(e.currentTarget)
       form_group = $(e.currentTarget).closest('.form-group')
-      $.ajax '/agents/validate',
+      $.ajax '/huginn/agents/validate',
         type: 'POST',
         data: form_data
         success: (data) ->
@@ -59,7 +59,7 @@ $ ->
       form_data = getFormData(e.currentTarget)
       return if returnedResults[form_data.attribute]
 
-      $.ajax '/agents/complete',
+      $.ajax '/huginn/agents/complete',
         type: 'POST',
         data: form_data
         success: (data) ->

@@ -3,8 +3,8 @@ require 'rails_helper'
 describe 'HttpStatusAgent' do
 
   let(:agent) do
-    Agents::HttpStatusAgent.new(:name => SecureRandom.uuid, :options => valid_params).tap do |a|
-      a.service = services(:generic)
+    Huginn::Agents::HttpStatusAgent.new(:name => SecureRandom.uuid, :options => valid_params).tap do |a|
+      a.service = huginn_services(:generic)
       a.user = users(:jane)
       a.options['url'] = 'http://google.com'
       a.save!
@@ -106,7 +106,7 @@ describe 'HttpStatusAgent' do
 
       let(:event_with_a_successful_ping) do
         agent.faraday.set(successful_url, Struct.new(:status).new(status_code))
-        Event.new.tap { |e| e.payload = { url: successful_url } }
+        Huginn::Event.new.tap { |e| e.payload = { url: successful_url } }
       end
 
       let(:events) do
@@ -156,7 +156,7 @@ describe 'HttpStatusAgent' do
 
         let(:event_with_a_successful_ping) do
           agent.faraday.set(successful_url, Struct.new(:status).new(0))
-          Event.new.tap { |e| e.payload = { url: successful_url } }
+          Huginn::Event.new.tap { |e| e.payload = { url: successful_url } }
         end
 
         it "should create one event" do
@@ -186,7 +186,7 @@ describe 'HttpStatusAgent' do
 
         let(:event_with_a_successful_ping) do
           agent.faraday.set(successful_url, Struct.new(:status).new(-1))
-          Event.new.tap { |e| e.payload = { url: successful_url } }
+          Huginn::Event.new.tap { |e| e.payload = { url: successful_url } }
         end
 
         it "should create one event" do
@@ -209,7 +209,7 @@ describe 'HttpStatusAgent' do
       describe "and with one event with a failing ping" do
 
         let(:failing_url)    { SecureRandom.uuid }
-        let(:event_with_a_failing_ping)    { Event.new.tap { |e| e.payload = { url: failing_url } } }
+        let(:event_with_a_failing_ping)    { Huginn::Event.new.tap { |e| e.payload = { url: failing_url } } }
 
         let(:events) do
           [event_with_a_successful_ping, event_with_a_failing_ping]

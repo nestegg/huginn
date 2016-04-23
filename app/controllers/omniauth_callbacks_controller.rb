@@ -4,9 +4,9 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     when *Devise.omniauth_providers
       service = current_user.services.initialize_or_update_via_omniauth(request.env['omniauth.auth'])
       if service && service.save
-        redirect_to services_path, notice: "The service was successfully created."
+        redirect_to huginn_services_path, notice: "The service was successfully created."
       else
-        redirect_to services_path, error: "Error creating the service."
+        redirect_to huginn_services_path, error: "Error creating the service."
       end
     else
       raise ActionController::RoutingError, 'not found'

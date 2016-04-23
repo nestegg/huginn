@@ -1,0 +1,2 @@
+module Huginn::LogsHelper
+end

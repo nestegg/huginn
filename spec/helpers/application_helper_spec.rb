@@ -106,7 +106,7 @@ describe ApplicationHelper do
 
   describe '#working' do
     before do
-      @agent = agents(:jane_website_agent)
+      @agent = huginn_agents(:jane_website_agent)
     end
 
     it 'returns a label "Disabled" if a given agent is disabled' do

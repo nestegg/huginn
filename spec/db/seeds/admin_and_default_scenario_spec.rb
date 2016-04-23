@@ -8,7 +8,7 @@ describe Seeder do
 
   describe '.seed' do
     it 'imports a default scenario' do
-      expect { Seeder.seed }.to change(Agent, :count).by(7)
+      expect { Seeder.seed }.to change(Huginn::Agent, :count).by(7)
     end
 
     it 'creates an admin' do

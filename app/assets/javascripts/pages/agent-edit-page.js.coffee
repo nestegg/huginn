@@ -35,14 +35,14 @@ class @AgentEditPage
     $(".event-descriptions").html("").hide()
     type = $('#agent_type').val()
 
-    if type == 'Agent'
+    if type == 'Huginn::Agent'
       $(".agent-settings").hide()
       $(".description").hide()
     else
       $(".agent-settings").show()
       $("#agent-spinner").fadeIn()
       $(".model-errors").hide() unless firstTime
-      $.getJSON "/agents/type_details", { type: type }, (json) =>
+      $.getJSON "/huginn/agents/type_details", { type: type }, (json) =>
         if json.can_be_scheduled
           if firstTime
             @showSchedule()
@@ -115,7 +115,7 @@ class @AgentEditPage
 
   showEventDescriptions: ->
     if $("#agent_source_ids").val()
-      $.getJSON "/agents/event_descriptions", { ids: $("#agent_source_ids").val().join(",") }, (json) =>
+      $.getJSON "/huginn/agents/event_descriptions", { ids: $("#agent_source_ids").val().join(",") }, (json) =>
         if json.description_html?
           $(".event-descriptions").show().html(json.description_html)
         else
@@ -193,4 +193,4 @@ class @AgentEditPage
     '<strong>' + agent.text + '</strong><br/>' + description
 
 $ ->
-  Utils.registerPage(AgentEditPage, forPathsMatching: /^agents/)
+  Utils.registerPage(AgentEditPage, forPathsMatching: /^huginn\/agents/)

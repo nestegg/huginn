@@ -1,69 +1,71 @@
 Huginn::Application.routes.draw do
-  resources :agents do
-    member do
-      post :run
-      post :dry_run
-      post :handle_details_post
-      put :leave_scenario
-      delete :remove_events
-      delete :memory, action: :destroy_memory
-    end
-
-    collection do
-      post :propagate
-      get :type_details
-      post :dry_run
-      get :event_descriptions
-      post :validate
-      post :complete
-    end
-
-    resources :logs, :only => [:index] do
-      collection do
-        delete :clear
+  namespace :huginn do
+    resources :agents do
+      member do
+        post :run
+        post :dry_run
+        post :handle_details_post
+        put :leave_scenario
+        delete :remove_events
+        delete :memory, action: :destroy_memory
       end
-    end
 
-    resources :events, :only => [:index]
-  end
+      collection do
+        post :propagate
+        get :type_details
+        post :dry_run
+        get :event_descriptions
+        post :validate
+        post :complete
+      end
 
-  resource :diagram, :only => [:show]
+      resources :logs, :only => [:index] do
+        collection do
+          delete :clear
+        end
+      end
 
-  resources :events, :only => [:index, :show, :destroy] do
-    member do
-      post :reemit
-    end
-  end
-
-  resources :scenarios do
-    collection do
-      resource :scenario_imports, :only => [:new, :create]
-    end
-
-    member do
-      get :share
-      get :export
+      resources :events, :only => [:index]
     end
 
     resource :diagram, :only => [:show]
-  end
 
-  resources :user_credentials, :except => :show
-
-  resources :services, :only => [:index, :destroy] do
-    member do
-      post :toggle_availability
+    resources :events, :only => [:index, :show, :destroy] do
+      member do
+        post :reemit
+      end
     end
-  end
 
-  resources :jobs, :only => [:index, :destroy] do
-    member do
-      put :run
+    resources :scenarios do
+      collection do
+        resource :scenario_imports, :only => [:new, :create]
+      end
+
+      member do
+        get :share
+        get :export
+      end
+
+      resource :diagram, :only => [:show]
     end
-    collection do
-      delete :destroy_failed
-      delete :destroy_all
-      post :retry_queued
+
+    resources :user_credentials, :except => :show
+
+    resources :services, :only => [:index, :destroy] do
+      member do
+        post :toggle_availability
+      end
+    end
+
+    resources :jobs, :only => [:index, :destroy] do
+      member do
+        put :run
+      end
+      collection do
+        delete :destroy_failed
+        delete :destroy_all
+        post :retry_queued
+      end
     end
   end
 
@@ -83,12 +85,12 @@ Huginn::Application.routes.draw do
   post  "/users/:user_id/update_location/:secret" => "web_requests#update_location" # legacy
 
   devise_for :users,
-             controllers: { 
+             controllers: {
                omniauth_callbacks: 'omniauth_callbacks',
                registrations: 'users/registrations'
              },
              sign_out_via: [:post, :delete]
-  
+
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end

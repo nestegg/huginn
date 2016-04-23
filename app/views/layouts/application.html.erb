@@ -45,23 +45,23 @@
       <div id="main-content">
         <%= yield %>
       </div>
-      
+
     </div>
 
     <script>
       window.agentPaths = {};
       window.agentNames = [];
       <% if current_user.present? -%>
-        var myAgents = <%= Utils.jsonify(current_user.agents.pluck(:name, :id).inject({}) {|m, a| m[a.first] = agent_path(a.last); m }) %>;
-        var myScenarios = <%= Utils.jsonify(current_user.scenarios.pluck(:name, :id).inject({}) {|m, s| m[s.first + " Scenario"] = scenario_path(s.last); m }) %>;
+        var myAgents = <%= Utils.jsonify(current_user.agents.pluck(:name, :id).inject({}) {|m, a| m[a.first] = huginn_agent_path(a.last); m }) %>;
+        var myScenarios = <%= Utils.jsonify(current_user.scenarios.pluck(:name, :id).inject({}) {|m, s| m[s.first + " Scenario"] = huginn_scenario_path(s.last); m }) %>;
         $.extend(window.agentPaths, myAgents);
         $.extend(window.agentPaths, myScenarios);
-        window.agentPaths["All Agents Index"] = <%= Utils.jsonify agents_path %>;
-        window.agentPaths["New Agent"] = <%= Utils.jsonify new_agent_path %>;
+        window.agentPaths["All Agents Index"] = <%= Utils.jsonify huginn_agents_path %>;
+        window.agentPaths["New Agent"] = <%= Utils.jsonify new_huginn_agent_path %>;
         window.agentPaths["Account"] = <%= Utils.jsonify edit_user_registration_path %>;
-        window.agentPaths["Events Index"] = <%= Utils.jsonify events_path %>;
-        window.agentPaths["View Agent Diagram"] = <%= Utils.jsonify diagram_path %>;
-        window.agentPaths["Run Event Propagation"] = { url: <%= Utils.jsonify propagate_agents_path %>, method: 'POST' };
+        window.agentPaths["Events Index"] = <%= Utils.jsonify huginn_events_path %>;
+        window.agentPaths["View Agent Diagram"] = <%= Utils.jsonify huginn_diagram_path %>;
+        window.agentPaths["Run Event Propagation"] = { url: <%= Utils.jsonify propagate_huginn_agents_path %>, method: 'POST' };
 
         $.each(window.agentPaths, function(name, v) { window.agentNames.push(name); });
       <% end -%>

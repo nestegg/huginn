@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'rails_helper'
 
 describe AgentsExporter do
@@ -8,7 +9,7 @@ describe AgentsExporter do
     let(:tag_fg_color) { "#ffffff" }
     let(:tag_bg_color) { "#000000" }
     let(:source_url) { "http://yourhuginn.com/scenarios/2/export.json" }
-    let(:agent_list) { [agents(:jane_weather_agent), agents(:jane_rain_notifier_agent)] }
+    let(:agent_list) { [huginn_agents(:jane_weather_agent), huginn_agents(:jane_rain_notifier_agent)] }
     let(:exporter) { AgentsExporter.new(
       :agents => agent_list, :name => name, :description => description, :source_url => source_url,
       :guid => guid, :tag_fg_color => tag_fg_color, :tag_bg_color => tag_bg_color) }
@@ -33,15 +34,15 @@ describe AgentsExporter do
     end
 
     it "does not output links to other agents outside of the incoming set" do
-      Link.create!(:source_id => agents(:jane_weather_agent).id, :receiver_id => agents(:jane_website_agent).id)
-      Link.create!(:source_id => agents(:jane_website_agent).id, :receiver_id => agents(:jane_rain_notifier_agent).id)
+      Huginn::Link.create!(:source_id => huginn_agents(:jane_weather_agent).id, :receiver_id => huginn_agents(:jane_website_agent).id)
+      Huginn::Link.create!(:source_id => huginn_agents(:jane_website_agent).id, :receiver_id => huginn_agents(:jane_rain_notifier_agent).id)
 
       expect(exporter.as_json[:links]).to eq([{ :source => guid_order(agent_list, :jane_weather_agent), :receiver => guid_order(agent_list, :jane_rain_notifier_agent) }])
     end
 
     it "outputs control links to agents within the incoming set, but not outside it" do
-      agents(:jane_rain_notifier_agent).control_targets = [agents(:jane_weather_agent), agents(:jane_basecamp_agent)]
-      agents(:jane_rain_notifier_agent).save!
+      huginn_agents(:jane_rain_notifier_agent).control_targets = [huginn_agents(:jane_weather_agent), huginn_agents(:jane_basecamp_agent)]
+      huginn_agents(:jane_rain_notifier_agent).save!
 
       expect(exporter.as_json[:control_links]).to eq([{ :controller => guid_order(agent_list, :jane_rain_notifier_agent), :control_target => guid_order(agent_list, :jane_weather_agent) }])
     end
@@ -73,6 +74,6 @@ describe AgentsExporter do
   end
 
   def guid_order(agent_list, agent_name)
-    agent_list.map{|a|a.guid}.sort.find_index(agents(agent_name).guid)
+    agent_list.map{|a|a.guid}.sort.find_index(huginn_agents(agent_name).guid)
   end
 end

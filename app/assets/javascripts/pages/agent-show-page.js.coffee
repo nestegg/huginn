@@ -15,7 +15,7 @@ class @AgentShowPage
     e.preventDefault()
     $("#logs .spinner").show()
     $("#logs .refresh, #logs .clear").hide()
-    $.get "/agents/#{agentId}/logs", (html) =>
+    $.get "/huginn/agents/#{agentId}/logs", (html) =>
       $("#logs .logs").html html
       $("#logs .logs .show-log-details").each ->
         $button = $(this)
@@ -35,7 +35,7 @@ class @AgentShowPage
       e.preventDefault()
       $("#logs .spinner").show()
       $("#logs .refresh, #logs .clear").hide()
-      $.post "/agents/#{agentId}/logs/clear", { "_method": "DELETE" }, (html) =>
+      $.post "/huginn/agents/#{agentId}/logs/clear", { "_method": "DELETE" }, (html) =>
         $("#logs .logs").html html
         $("#show-tabs li a.recent-errors").removeClass 'recent-errors'
         $("#logs .spinner").stop(true, true).fadeOut ->
@@ -56,7 +56,7 @@ class @AgentShowPage
       e.preventDefault()
       $("#memory .spinner").css(display: 'inline-block')
       $("#memory .clear").hide()
-      $.post "/agents/#{agentId}/memory", { "_method": "DELETE" }
+      $.post "/huginn/agents/#{agentId}/memory", { "_method": "DELETE" }
         .done ->
           $("#memory .spinner").fadeOut ->
             $("#memory + .memory").text "{\n}\n"
@@ -65,5 +65,5 @@ class @AgentShowPage
             $("#memory .clear").css(display: 'inline-block')
 
 $ ->
-  Utils.registerPage(AgentShowPage, forPathsMatching: /^agents\/\d+/)
+  Utils.registerPage(AgentShowPage, forPathsMatching: /^huginn\/agents\/\d+/)
   

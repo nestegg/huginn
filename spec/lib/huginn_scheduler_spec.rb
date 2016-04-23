@@ -21,19 +21,19 @@ describe HuginnScheduler do
   end
 
   it "should run scheduled agents" do
-    mock(Agent).run_schedule('every_1h')
+    mock(Huginn::Agent).run_schedule('every_1h')
     mock.instance_of(IO).puts('Queuing schedule for every_1h')
     @scheduler.send(:run_schedule, 'every_1h')
   end
 
   it "should propagate events" do
-    mock(Agent).receive!
+    mock(Huginn::Agent).receive!
     stub.instance_of(IO).puts
     @scheduler.send(:propagate!)
   end
 
   it "schould clean up expired events" do
-    mock(Event).cleanup_expired!
+    mock(Huginn::Event).cleanup_expired!
     stub.instance_of(IO).puts
     @scheduler.send(:cleanup_expired_events!)
   end
@@ -91,20 +91,20 @@ end
 
 describe Rufus::Scheduler do
   before :each do
-    Agent.delete_all
+    Huginn::Agent.delete_all
 
     @taoe, Thread.abort_on_exception = Thread.abort_on_exception, false
     @oso, @ose, $stdout, $stderr = $stdout, $stderr, StringIO.new, StringIO.new
 
     @scheduler = Rufus::Scheduler.new
 
-    stub.any_instance_of(Agents::SchedulerAgent).second_precision_enabled { true }
+    stub.any_instance_of(Huginn::Agents::SchedulerAgent).second_precision_enabled { true }
 
-    @agent1 = Agents::SchedulerAgent.new(name: 'Scheduler 1', options: { action: 'run', schedule: '*/1 * * * * *' }).tap { |a|
+    @agent1 = Huginn::Agents::SchedulerAgent.new(name: 'Scheduler 1', options: { action: 'run', schedule: '*/1 * * * * *' }).tap { |a|
       a.user = users(:bob)
       a.save!
     }
-    @agent2 = Agents::SchedulerAgent.new(name: 'Scheduler 2', options: { action: 'run', schedule: '*/1 * * * * *' }).tap { |a|
+    @agent2 = Huginn::Agents::SchedulerAgent.new(name: 'Scheduler 2', options: { action: 'run', schedule: '*/1 * * * * *' }).tap { |a|
       a.user = users(:bob)
       a.save!
     }

@@ -7,7 +7,7 @@ module Users
     describe "POST create" do
       context 'with valid params' do
         it "imports the default scenario for the new user" do
-          mock(DefaultScenarioImporter).import(is_a(User))
+          mock(Huginn::DefaultScenarioImporter).import(is_a(User))
 
           @request.env["devise.mapping"] = Devise.mappings[:user]
           post :create, :user => {username: 'jdoe', email: 'jdoe@example.com',
@@ -17,7 +17,7 @@ module Users
 
       context 'with invalid params' do
         it "does not import the default scenario" do
-          stub(DefaultScenarioImporter).import(is_a(User)) { fail "Should not attempt import" }
+          stub(Huginn::DefaultScenarioImporter).import(is_a(User)) { fail "Should not attempt import" }
 
           @request.env["devise.mapping"] = Devise.mappings[:user]
           setup_controller_for_warden

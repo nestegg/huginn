@@ -7,13 +7,13 @@ describe User do
         before do
           stub(User).using_invitation_code? {true}
         end
-        
+
         it "only accepts valid invitation codes" do
           User::INVITATION_CODES.each do |v|
             should allow_value(v).for(:invitation_code)
           end
         end
-  
+
         it "can reject invalid invitation codes" do
           %w['foo', 'bar'].each do |v|
             should_not allow_value(v).for(:invitation_code)
@@ -26,12 +26,12 @@ describe User do
           expect(u).to be_valid
         end
       end
-      
+
       context "when configured not to use invitation codes" do
         before do
           stub(User).using_invitation_code? {false}
         end
-        
+
         it "skips this validation" do
           %w['foo', 'bar', nil, ''].each do |v|
             should allow_value(v).for(:invitation_code)
@@ -43,7 +43,7 @@ describe User do
 
   context '#deactivate!' do
     it "deactivates the user and all her agents" do
-      agent = agents(:jane_website_agent)
+      agent = huginn_agents(:jane_website_agent)
       users(:jane).deactivate!
       agent.reload
       expect(agent.deactivated).to be_truthy
@@ -57,7 +57,7 @@ describe User do
     end
 
     it 'activates the user and all his agents' do
-      agent = agents(:bob_website_agent)
+      agent = huginn_agents(:bob_website_agent)
       users(:bob).activate!
       agent.reload
       expect(agent.deactivated).to be_falsy
